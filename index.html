@@ -168,9 +168,10 @@
   .btn-small { width: auto; font-size: 13px; padding: 9px 14px; font-weight: 600; }
 
   /* ---------- Buchungs-Liste ---------- */
-  .tx { display: flex; align-items: center; gap: 11px; padding: 10px 2px;
-        border-bottom: 1px solid var(--line); }
+  .tx { display: block; border-bottom: 1px solid var(--line); cursor: pointer; }
   .tx:last-child { border-bottom: none; }
+  .tx:hover > .tx-row { background: var(--surface); border-radius: 10px; }
+  .tx-row { display: flex; align-items: center; gap: 11px; padding: 10px 2px; }
   .tx-icon { width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
              display: flex; align-items: center; justify-content: center;
              font-size: 16px; font-weight: 700; }
@@ -280,6 +281,95 @@
                     list-style-position: inside; }
   details[open] summary { margin-bottom: 8px; }
   details summary .hint { font-weight: 500; text-transform: none; letter-spacing: 0; font-size: 12px; }
+
+  /* ---------- Import UI (Bank & TR) ---------- */
+  .import-intro { font-size: 13px; color: var(--muted); margin-bottom: 12px; line-height: 1.5; }
+  .import-intro a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .import-help { margin-top: 12px; padding: 12px; background: var(--bg);
+                 border-radius: 10px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .import-help b { color: var(--ink); }
+  .import-summary { padding: 12px 14px; background: var(--accent-bg); border-radius: 10px;
+                    margin-bottom: 12px; font-size: 13px; line-height: 1.5; }
+  .import-summary strong { color: var(--accent); }
+  .import-summary.warn { background: #fef3c7; color: #92400e; }
+  .import-summary.warn strong { color: #92400e; }
+
+  /* Posteingang: eine Zeile je unklassifizierter Buchung */
+  .pi-row { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .pi-row:last-child { border-bottom: none; }
+  .pi-row-linked { opacity: .65; }
+  .pi-row-linked .pi-desc { font-weight: 500; }
+  .pi-head { display: flex; justify-content: space-between; align-items: flex-start;
+             gap: 10px; margin-bottom: 8px; }
+  .pi-desc { font-size: 14px; font-weight: 600; line-height: 1.3; flex: 1; word-break: break-word; }
+  .pi-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .pi-amount { font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .pi-amount.neg { color: var(--red); }
+  .pi-amount.pos { color: var(--green); }
+  .pi-controls { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .pi-controls select, .pi-controls input {
+    font-size: 13px; padding: 8px 10px; border-radius: 9px; flex: 1; min-width: 90px;
+  }
+  .pi-controls input { min-width: 70px; }
+  .pi-rest-btn { background: var(--bg); border: 1px solid var(--line); color: var(--muted);
+                 font-family: inherit; font-size: 12px; font-weight: 600;
+                 padding: 8px 12px; border-radius: 9px; cursor: pointer; white-space: nowrap; }
+  .pi-rest-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .pi-rest-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .pi-match-info { display: flex; justify-content: space-between; align-items: center;
+                   gap: 10px; font-size: 12px; color: var(--muted); }
+  .pi-match-info span { flex: 1; }
+  .pi-match-warn { font-size: 12px; color: #92400e; background: #fef3c7;
+                   padding: 6px 10px; border-radius: 8px; margin-bottom: 8px; }
+  .pi-match-warn a { color: #92400e; font-weight: 600; text-decoration: underline; }
+
+  /* Aufräumer für Doppelbuchungen: Zeilen mit Radio-Auswahl */
+  .dup-row { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .dup-row:last-child { border-bottom: none; }
+  .dup-choice { display: flex; flex-direction: column; gap: 4px; margin-top: 6px;
+                font-size: 13px; color: var(--muted); }
+  .dup-choice label { cursor: pointer; padding: 4px 0; }
+  .dup-choice input[type="radio"] { margin-right: 8px; }
+
+  /* Kategorie-Chips im Posteingang – tippbare Buttons statt Dropdown */
+  .cat-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .cat-chip { font-family: inherit; font-size: 12px; font-weight: 600;
+              padding: 5px 11px; border-radius: 20px; border: 1px solid var(--line);
+              background: var(--surface); color: var(--muted); cursor: pointer; }
+  .cat-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .cat-chip:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+  /* Inline-Edit-Panel – sitzt als Block-Element unter .tx-row */
+  .tx-edit-panel { padding: 4px 2px 12px; border-top: 1px solid var(--line); }
+  .tx-edit-field { margin-bottom: 10px; }
+  .tx-edit-field label { font-size: 11px; font-weight: 700; color: var(--muted);
+                         text-transform: uppercase; letter-spacing: .04em;
+                         display: block; margin-bottom: 4px; }
+  .tx-edit-field input[type="text"] { width: 100%; box-sizing: border-box; }
+  .tef-save { padding: 10px; }
+  .tef-cancel { padding: 10px; border-radius: 12px; }
+
+  .badge-count { display: inline-block; background: var(--red); color: #fff;
+                 font-size: 11px; font-weight: 700; padding: 2px 8px;
+                 border-radius: 10px; margin-left: 6px; letter-spacing: 0; text-transform: none; }
+
+  .btn-secondary { width: 100%; font-family: inherit; font-size: 14px; font-weight: 600;
+                   color: var(--accent); background: var(--surface);
+                   border: 1px solid var(--accent); border-radius: 12px;
+                   padding: 11px; cursor: pointer; margin-top: 8px; }
+  .btn-secondary:hover { background: var(--accent-bg); }
+
+  /* TR-Import: Positions-Vorschau */
+  .tr-pos-list { max-height: 240px; overflow-y: auto; margin: 10px 0;
+                 border: 1px solid var(--line); border-radius: 10px; padding: 4px 10px; }
+  .tr-pos { display: flex; justify-content: space-between; padding: 6px 0;
+            border-bottom: 1px solid var(--line); font-size: 12px; gap: 10px; }
+  .tr-pos:last-child { border-bottom: none; }
+  .tr-pos-name { flex: 1; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tr-pos-val { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; flex-shrink: 0; }
+  .tr-pos-cls { font-size: 10px; color: var(--muted); text-transform: uppercase;
+                letter-spacing: .04em; padding: 2px 6px; border: 1px solid var(--line);
+                border-radius: 6px; flex-shrink: 0; align-self: center; }
 </style>
 <script>
   /* Läuft VOR dem Rendern des Body: setzt Dark Mode sofort, damit es
@@ -367,6 +457,25 @@
     </div>
   </details>
 
+  <!-- ============ BANK-IMPORT (VR-CSV) ============ -->
+  <details id="dBankImport">
+    <summary>Bank-Import<span class="hint" id="bankBadge"></span></summary>
+    <div class="card">
+      <div class="import-intro">
+        Lade deine VR-Umsätze als CSV. Bekannte Buchungen werden automatisch
+        erkannt — nur echte Neuigkeiten musst du kurz einsortieren.
+        <a href="#" id="bankHelpToggle">Wo finde ich die CSV?</a>
+      </div>
+      <button class="btn" id="bankPickBtn">CSV auswählen</button>
+      <input type="file" id="bankFileInput" accept=".csv,text/csv" style="display:none">
+      <div id="bankHelp" class="import-help" style="display:none">
+        <b>Nur im Browser, nicht in der App:</b> vr.de → Login → Girokonto →
+        Umsätze → Export → <b>CSV</b> → Zeitraum wählen → Download.
+      </div>
+      <div id="bankResult" style="margin-top:14px"></div>
+    </div>
+  </details>
+
   <!-- ============ VERSCHENKTES KAPITAL (Opportunitätskosten) ============ -->
   <details open id="dFood">
     <summary>Verschenktes Kapital · Opportunitätskosten</summary>
@@ -424,6 +533,35 @@
   </div><!-- Ende Seite 1: Aktuell -->
 
   <div class="page" id="pageWealth">
+
+  <!-- ============ TRADE REPUBLIC IMPORT (PDF) ============ -->
+  <details id="dTRImport">
+    <summary>Trade Republic Import</summary>
+    <div class="card">
+      <div class="import-intro">
+        Lade deinen Depotauszug oder deine Crypto-Übersicht als PDF hoch.
+        Die App liest die aktuellen Kurswerte aus und aktualisiert deine
+        Portfolios <b>TR · Aktien</b>, <b>TR · ETFs</b> und <b>TR · Krypto</b>.
+        <a href="#" id="trHelpToggle">Wo finde ich die Datei?</a>
+      </div>
+      <button class="btn" id="trPickBtn">PDF-Datei auswählen</button>
+      <input type="file" id="trFileInput" accept="application/pdf,.pdf" style="display:none">
+      <div id="trHelp" class="import-help" style="display:none">
+        <b>In der Trade-Republic-App</b>: Tippe unten rechts auf <b>Profil</b>,
+        dann auf <b>Kontoauszüge</b>. Für dein Depot: <b>Depotauszug</b>
+        wählen → aktuelles Datum → <b>Teilen</b> → in „Dateien" speichern.
+        Für Krypto: <b>Krypto-Übersicht</b> → gleich verfahren. Danach
+        die gespeicherten PDFs hier hochladen (auch beide nacheinander).
+        <br><br>
+        <i>Hinweis: Beim ersten Import wird die PDF-Bibliothek <b>pdf.js</b>
+        einmalig aus dem Netz nachgeladen (ca. 400&nbsp;KB). Danach cached
+        der Browser sie und alles läuft offline.</i>
+      </div>
+      <div id="trImportSummary" style="display:none; margin-top:14px"></div>
+      <div id="trPositionList" style="display:none; margin-top:10px"></div>
+      <div id="trConfirmActions" style="display:none; margin-top:12px"></div>
+    </div>
+  </details>
 
   <!-- ============ 7. VERMÖGEN (Langfrist-Anker, kompakt) ============ -->
   <details open id="dWealth">
@@ -597,7 +735,9 @@
    1. DATEN
    ============================================================ */
 // Feste Kategorien-Liste (Unterkategorien kommen später).
-const CATEGORIES = ["Essen","Getränke","Snacks","Freizeit","Transport","Wohnen","Shopping","Gesundheit","Sonstiges"];
+// "Rest" ist die Sammelkategorie für Bank-Kleinkram, den du nicht einzeln
+// tracken willst – 3 € Bäcker, 12 € Mensa, 4 € Parkschein.
+const CATEGORIES = ["Essen","Getränke","Snacks","Freizeit","Transport","Wohnen","Shopping","Gesundheit","Sonstiges","Rest"];
 // Anlageklassen für Portfolios (Vermögens-Seite):
 const ASSET_TYPES = ["ETF","Aktien","Krypto","Tagesgeld","Anleihen","Sonstiges"];
 
@@ -889,7 +1029,6 @@ function renderTransactions() {
     const cat  = isIncome ? "" : (t.category || "Sonstiges");
     const tag  = t.tag ? `<span class="chip">${esc(t.tag)}</span>` : "";
     const auto = t.auto ? `<span class="chip" style="background:var(--bg);color:var(--muted)">auto</span>` : "";
-    // Bei Ausgaben in Kategorien mit Referenzpreis: Differenz anzeigen.
     let food = "";
     const refC = !isIncome ? refFor(t.category) : null;
     if (refC !== null) {
@@ -902,17 +1041,82 @@ function renderTransactions() {
         food = `<span class="chip" style="background:var(--green-bg);color:var(--green)">${euro(-d)} gespart</span>`;
     }
     return `
-      <div class="tx">
-        <div class="tx-icon ${t.type}">${sign}</div>
-        <div class="tx-body">
-          <div class="tx-desc">${esc(t.description || (isIncome ? "Einnahme" : "Ausgabe"))}</div>
-          <div class="tx-meta">${date}${cat ? " · " + cat : ""} ${tag}${auto}${food}</div>
+      <div class="tx" data-id="${t.id}">
+        <div class="tx-row">
+          <div class="tx-icon ${t.type}">${sign}</div>
+          <div class="tx-body">
+            <div class="tx-desc">${esc(t.description || (isIncome ? "Einnahme" : "Ausgabe"))}</div>
+            <div class="tx-meta">${date}${cat ? " · " + cat : ""} ${tag}${auto}${food}</div>
+          </div>
+          <div class="tx-amount num ${t.type}">${sign} ${euro(t.amount)}</div>
+          <button class="tx-del" data-id="${t.id}" title="Löschen">×</button>
         </div>
-        <div class="tx-amount num ${t.type}">${sign} ${euro(t.amount)}</div>
-        <button class="tx-del" data-id="${t.id}" title="Löschen">×</button>
       </div>`;
   }).join("");
 }
+
+// Zeigt das Inline-Edit-Panel für eine Transaktion (ersetzt die .tx-Zeile kurz)
+function openTxEdit(id) {
+  const t = transactions.find(t => t.id === id);
+  const row = document.querySelector(`.tx[data-id="${id}"]`);
+  if (!t || !row || row.querySelector(".tx-edit-panel")) return;
+
+  const isIncome = t.type === "income";
+  const catChips = isIncome ? "" : CATEGORIES.map(c =>
+    `<button class="cat-chip${t.category === c ? " active" : ""}" data-cat="${esc(c)}">${esc(c)}</button>`
+  ).join("");
+
+  const panel = document.createElement("div");
+  panel.className = "tx-edit-panel";
+  panel.innerHTML = `
+    <div class="tx-edit-field">
+      <label>Beschreibung</label>
+      <input class="tef-desc" type="text" value="${esc(t.description || "")}">
+    </div>
+    ${isIncome ? "" : `<div class="tx-edit-field">
+      <label>Kategorie</label>
+      <div class="cat-chips">${catChips}</div>
+    </div>`}
+    ${isIncome ? "" : `<div class="tx-edit-field">
+      <label>Tag</label>
+      <input class="tef-tag" type="text" value="${esc(t.tag || "")}" placeholder="z. B. Paris, Abi-Party">
+    </div>`}
+    ${!isIncome && refFor(t.category) !== null ? `<div class="tx-edit-field">
+      <label style="display:flex;align-items:center;gap:8px;font-weight:500">
+        <input type="checkbox" class="tef-conscious"${t.conscious ? " checked" : ""}> Bewusst gewählt
+      </label>
+    </div>` : ""}
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn tef-save" style="flex:1">Speichern</button>
+      <button class="btn-secondary tef-cancel" style="flex:1;margin-top:0">Abbrechen</button>
+    </div>`;
+
+  // Kategorie-Chip-Auswahl im Panel
+  let selectedCat = t.category || "Sonstiges";
+  panel.querySelectorAll(".cat-chip").forEach(btn => {
+    btn.addEventListener("click", () => {
+      selectedCat = btn.dataset.cat;
+      panel.querySelectorAll(".cat-chip").forEach(b => b.classList.toggle("active", b.dataset.cat === selectedCat));
+    });
+  });
+
+  panel.querySelector(".tef-save").addEventListener("click", () => {
+    t.description = panel.querySelector(".tef-desc").value.trim() || t.description;
+    if (!isIncome) {
+      t.category = selectedCat;
+      t.tag = panel.querySelector(".tef-tag").value.trim();
+      const cb = panel.querySelector(".tef-conscious");
+      if (cb) t.conscious = cb.checked;
+    }
+    save(); render();
+  });
+  panel.querySelector(".tef-cancel").addEventListener("click", () => {
+    panel.remove();
+  });
+
+  row.appendChild(panel);
+}
+
 
 function renderBudgets() {
   const list  = document.getElementById("budgetList");
@@ -1754,9 +1958,24 @@ document.getElementById("addTxBtn").addEventListener("click", () => {
 });
 
 document.getElementById("txList").addEventListener("click", e => {
-  const btn = e.target.closest(".tx-del"); if (!btn) return;
-  transactions = transactions.filter(t => t.id !== Number(btn.dataset.id));
-  save(); render();
+  // Löschen-Button
+  const del = e.target.closest(".tx-del");
+  if (del) {
+    transactions = transactions.filter(t => t.id !== Number(del.dataset.id));
+    save(); render();
+    return;
+  }
+  // Klicks INNERHALB eines offenen Edit-Panels ignorieren –
+  // sonst schließt sich das Panel bei jedem Chip-/Input-Klick sofort wieder.
+  if (e.target.closest(".tx-edit-panel")) return;
+  // Klick auf die Zeile selbst → Panel öffnen oder schließen
+  const row = e.target.closest(".tx");
+  if (!row) return;
+  const id = Number(row.dataset.id);
+  const existing = row.querySelector(".tx-edit-panel");
+  if (existing) { existing.remove(); return; }
+  document.querySelectorAll(".tx-edit-panel").forEach(p => p.remove());
+  openTxEdit(id);
 });
 
 // Fixkosten
@@ -2111,6 +2330,675 @@ if (FSA) {
                   .catch(() => updateSyncStatus());
 } else {
   updateSyncStatus();
+}
+
+/* ============================================================
+   BANK-IMPORT (VR Volksbank CSV)
+   ============================================================
+   Neuer, schlanker Flow:
+   1. CSV einlesen, bereits importierte Buchungen anhand bankRef rausfiltern
+   2. Verbundene App-Buchungen (Dauerauftrag, Feste Kosten, manuelle
+      Eingaben) still erkennen und mit bankRef markieren – kein Zutun nötig
+   3. Neue Einnahmen direkt übernehmen – keine Kategorie nötig
+   4. Nur neue Ausgaben ohne Match zeigen – kompakt, nur Kategorie wählen
+   ============================================================ */
+
+// -- Kleine Helfer für deutsches Zahlen- und Datumsformat --
+// "1.234,56" → 1234.56, "-11,80" → -11.8
+function parseGermanNumber(str) {
+  if (!str) return NaN;
+  // Punkt = Tausendertrenner raus, Komma = Dezimaltrenner rein
+  return parseFloat(String(str).trim().replace(/\./g, "").replace(",", "."));
+}
+// "24.07.2026" → Date-Objekt (Mittag, damit Zeitzonen-Sprünge nichts kaputtmachen)
+function parseGermanDate(str) {
+  if (!str) return null;
+  const m = String(str).trim().match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+  if (!m) return null;
+  return new Date(+m[3], +m[2]-1, +m[1], 12, 0, 0);
+}
+
+// CSV-Zeile in Spalten aufsplitten. Trennzeichen bei VR: Semikolon.
+// Wir behandeln zusätzlich zwei Sonderfälle: Felder in "..." (falls die Bank
+// sowas mal ausgibt) und escapte "" innerhalb solcher Felder.
+function splitCSVLine(line, sep) {
+  const result = [];
+  let cur = "";
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      if (inQuotes && line[i+1] === '"') { cur += '"'; i++; }
+      else inQuotes = !inQuotes;
+    } else if (ch === sep && !inQuotes) {
+      result.push(cur); cur = "";
+    } else {
+      cur += ch;
+    }
+  }
+  result.push(cur);
+  return result;
+}
+
+// Kompletter CSV-Text → Array von Objekten { Spaltenname: Wert, ... }
+function parseCSV(text, sep) {
+  sep = sep || ";";
+  // BOM (Byte-Order-Mark, das \uFEFF am Anfang) entfernen – Excel/Windows fügen das gerne ein
+  if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+  const lines = text.split(/\r?\n/).filter(l => l.length > 0);
+  if (lines.length < 2) return [];
+  const headers = splitCSVLine(lines[0], sep).map(h => h.trim());
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const cols = splitCSVLine(lines[i], sep);
+    // Zeilen, die nicht die richtige Spaltenzahl haben, überspringen
+    // (verhindert Absturz bei kaputten oder mehrzeiligen Feldern)
+    if (cols.length !== headers.length) continue;
+    const row = {};
+    headers.forEach((h, j) => { row[h] = (cols[j] || "").trim(); });
+    rows.push(row);
+  }
+  return rows;
+}
+
+// Aus einer VR-Bank-Zeile eine sinnvolle Beschreibung extrahieren.
+// Kartenzahlungen sind der Sonderfall: Name-Spalte ist leer, der Händler steht
+// im Verwendungszweck in einem festen Muster:
+//   "REWE Stuttgart Kronenstr.  DE  Stuttgart              EUR   1,00 ..."
+// Wir schneiden alles vor dem Ländercode ab.
+function extractDescription(row) {
+  const name = row["Name Zahlungsbeteiligter"] || "";
+  const vzw  = row["Verwendungszweck"] || "";
+  const btext = row["Buchungstext"] || "";
+
+  // Direkte Überweisung mit sauberem Namen? Nehmen wir den (z. B. "Jonas Bärtle")
+  if (name) return name;
+
+  // Kartenzahlung erkannt am typischen Muster – Merchant + Ländercode + Ort
+  const cardMatch = vzw.match(/^(.+?)\s{2,}[A-Z]{2}\s{2,}[^\s]/);
+  if (cardMatch) return cardMatch[1].trim();
+
+  // Fallback: erste 60 Zeichen des Verwendungszwecks
+  const fallback = (vzw || btext).replace(/\s+/g, " ").trim();
+  return fallback.slice(0, 60) || "(unbekannt)";
+}
+
+// Eindeutigen Schlüssel je Bank-Buchung. Damit erkennt die App bei einem
+// zweiten CSV-Import: "das habe ich schon" und filtert es raus.
+// Grundlage: Datum + Betrag + Saldo nach Buchung + Verwendungszweck.
+// Wichtig: SALDO ist entscheidend, um zwei EHRLICHE Duplikate zu unterscheiden
+// (z. B. zweimal am selben Tag Paris-Metro für 12,30 €) – nach der einen
+// Buchung ist dein Kontostand anders als nach der anderen. Das ist die
+// implizite "Transaktions-ID", die die Bank uns kostenlos mitliefert.
+function bankRefKey(row) {
+  const raw = (row["Buchungstag"] || "") + "|" +
+              (row["Betrag"] || "") + "|" +
+              (row["Saldo nach Buchung"] || "") + "|" +
+              (row["Verwendungszweck"] || "").slice(0, 50);
+  // djb2-Hash – simpel aber für unseren Zweck ausreichend eindeutig
+  let h = 5381;
+  for (let i = 0; i < raw.length; i++) h = (((h << 5) + h) + raw.charCodeAt(i)) | 0;
+  return "bank_" + Math.abs(h).toString(36);
+}
+
+// Zieht aus der Rohzeile alles Wichtige raus. Rückgabe = eine "Kandidat"-
+// Buchung, die im Posteingang landen kann. type: expense/income.
+function normalizeBankRow(row) {
+  const date = parseGermanDate(row["Buchungstag"]);
+  const amount = parseGermanNumber(row["Betrag"]);
+  if (!date || isNaN(amount)) return null;
+  return {
+    ref: bankRefKey(row),
+    date: date.toISOString(),
+    amount: Math.abs(amount),
+    type: amount < 0 ? "expense" : "income",
+    description: extractDescription(row),
+    rawVzw: (row["Verwendungszweck"] || "").slice(0, 100)
+  };
+}
+
+// ---- Helfer: passende App-Buchung finden ----
+// Gleicher Typ + Betrag (cent-genau) + max. 20 Tage Abstand.
+// reservedIds verhindert, dass dieselbe App-Buchung mehrfach vergeben wird
+// (z. B. vier wöchentliche Gym-Buchungen kriegen je eine eigene App-Buchung).
+function findExistingMatch(cand, reservedIds) {
+  const bankDate = new Date(cand.date);
+  const candidates = transactions.filter(t => {
+    if (t.bankRef) return false;                          // schon verbunden
+    if (reservedIds && reservedIds.has(t.id)) return false; // in dieser Session schon reserviert
+    if (t.type !== cand.type) return false;
+    if (Math.abs(t.amount - cand.amount) > 0.005) return false;
+    const dt = new Date(t.date);
+    const daysDiff = Math.abs((bankDate - dt) / (1000 * 60 * 60 * 24));
+    return daysDiff <= 20;
+  });
+  if (candidates.length === 0) return null;
+  // Zeitlich nächste zuerst
+  candidates.sort((a, b) =>
+    Math.abs(new Date(a.date) - bankDate) - Math.abs(new Date(b.date) - bankDate)
+  );
+  return candidates[0];
+}
+
+
+// Nach dem Datei-Upload: parsen, filtern, Posteingang zeigen
+function handleBankFile(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    const text = reader.result;
+    let rows;
+    try { rows = parseCSV(text, ";"); }
+    catch (err) { alert("CSV konnte nicht gelesen werden: " + err.message); return; }
+    if (rows.length === 0) { alert("Keine Buchungen in der Datei gefunden."); return; }
+
+    // Existierende Refs sammeln – daran erkennen wir Duplikate (bereits importiert)
+    const existingRefs = new Set(transactions.filter(t => t.bankRef).map(t => t.bankRef));
+    // Reservierungs-Set: eine App-Buchung, die in dieser Session schon einer
+    // Bank-Buchung als Match zugewiesen wurde, darf nicht nochmal als Match
+    // für eine ANDERE Bank-Buchung dienen (sonst: mehrere Bank-Gym-Buchungen
+    // hängen alle an derselben App-Buchung und werden am Ende doch doppelt).
+    const reservedMatchIds = new Set();
+    const candidates = [];
+    let skipped = 0;
+    let matchCount = 0;
+
+    // Zeilen chronologisch (ältestes Datum zuerst) durchgehen, damit die
+    // Match-Reservierung deterministisch chronologisch läuft.
+    const sortedRows = rows.slice().sort((a, b) => {
+      const da = parseGermanDate(a["Buchungstag"]) || new Date(0);
+      const db = parseGermanDate(b["Buchungstag"]) || new Date(0);
+      return da - db;
+    });
+
+    for (const r of sortedRows) {
+      const cand = normalizeBankRow(r);
+      if (!cand) { skipped++; continue; }
+      if (existingRefs.has(cand.ref)) { skipped++; continue; }
+
+      // Prüfen, ob eine App-Buchung schon dazu existiert (Doppelbuchungs-Schutz)
+      const match = findExistingMatch(cand, reservedMatchIds);
+      if (match) {
+        reservedMatchIds.add(match.id);   // ← so kann derselbe Match nicht mehrfach vergeben werden
+        cand.match = { id: match.id, description: match.description, date: match.date };
+        cand.decision = { action: "link" };   // Standard: verbinden, keine neue Buchung
+        matchCount++;
+      }
+      candidates.push(cand);
+    }
+
+    pendingBank = candidates;
+    pendingBank.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+    // Automatisch & stumm übernehmen: Matches (bankRef setzen) + Einnahmen ohne Match
+    let autoLinked = 0, autoIncome = 0;
+    const stillPending = [];
+    for (const cand of pendingBank) {
+      if (cand.match && cand.decision && cand.decision.action === "link") {
+        const t = transactions.find(t => t.id === cand.match.id);
+        if (t) { t.bankRef = cand.ref; autoLinked++; }
+      } else if (cand.type === "income") {
+        transactions.push({
+          id: Date.now() + Math.floor(Math.random()*10000),
+          type: "income", amount: cand.amount, description: cand.description,
+          category: "", tag: "", conscious: false, date: cand.date, bankRef: cand.ref
+        });
+        autoIncome++;
+      } else {
+        stillPending.push(cand);  // neue Ausgabe ohne Match → Posteingang
+      }
+    }
+    if (autoLinked + autoIncome > 0) {
+      transactions.sort((a,b) => new Date(a.date) - new Date(b.date));
+      save(); render();
+    }
+    pendingBank = stillPending;
+
+    const el = document.getElementById("bankResult");
+    const parts = [rows.length + ' Buchungen'];
+    if (skipped > 0) parts.push(skipped + ' bereits importiert');
+    if (autoLinked > 0) parts.push(autoLinked + ' automatisch erkannt');
+    if (autoIncome > 0) parts.push(autoIncome + ' Einnahmen übernommen');
+    el.innerHTML = '<div class="import-summary">' + parts.join(' · ') + '.</div>';
+    if (pendingBank.length > 0) {
+      renderBankPosteingang();
+    } else {
+      el.innerHTML += '<div class="import-summary" style="margin-top:8px">✓ Alles automatisch erledigt – nichts zu sortieren.</div>';
+    }
+    refreshBankBadge();
+  };
+  reader.readAsText(file, "utf-8");
+}
+
+// ---- pendingBank: neue Ausgaben ohne Match ----
+// Einnahmen + gematchte Buchungen werden direkt übernommen, kein User-Input.
+let pendingBank = [];
+
+function refreshBankBadge() {
+  const badge = document.getElementById("bankBadge");
+  if (!badge) return;
+  badge.innerHTML = pendingBank.length > 0
+    ? ' <span class="badge-count">' + pendingBank.length + '</span>' : '';
+}
+
+function renderBankPosteingang() {
+  const el = document.getElementById("bankResult");
+  if (!el || pendingBank.length === 0) return;
+
+  const rows = pendingBank.map((p, i) => {
+    const dt = new Date(p.date).toLocaleDateString("de-DE", { day:"2-digit", month:"2-digit" });
+    const cur = (p.decision && p.decision.category) || "";
+    const chips = CATEGORIES.map(c =>
+      '<button class="cat-chip' + (cur === c ? ' active' : '') +
+      '" data-idx="' + i + '" data-cat="' + escapeHtml(c) + '">' + escapeHtml(c) + '</button>'
+    ).join('');
+    return (
+      '<div class="pi-row" data-idx="' + i + '">' +
+        '<div class="pi-head">' +
+          '<div class="pi-desc">' + escapeHtml(p.description) + '</div>' +
+          '<div style="display:flex;gap:10px;align-items:center;flex-shrink:0">' +
+            '<span class="pi-meta">' + dt + '</span>' +
+            '<span class="pi-amount neg">-' + fmtEuro(p.amount) + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="cat-chips">' + chips + '</div>' +
+      '</div>'
+    );
+  }).join('');
+
+  el.innerHTML =
+    '<div style="font-size:13px;color:var(--muted);margin-bottom:10px">' +
+      '<b>' + pendingBank.length + '</b> neue Ausgabe' + (pendingBank.length === 1 ? '' : 'n') +
+      ' – Kategorie antippen, dann übernehmen.' +
+    '</div>' +
+    '<div id="bankPosteingangRows">' + rows + '</div>' +
+    '<div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">' +
+      '<button class="btn" id="bankConfirmBtn">Übernehmen</button>' +
+      '<button class="btn-secondary" id="bankAllRestBtn">Alle → Rest</button>' +
+      '<button class="btn-secondary" id="bankCancelBtn">Verwerfen</button>' +
+    '</div>';
+}
+
+// Chip antippen → Kategorie setzen, Chips dieser Zeile neu zeichnen
+document.addEventListener("click", e => {
+  const chip = e.target.closest && e.target.closest(".cat-chip");
+  const el = chip && document.getElementById("bankResult");
+  if (!chip || !el || !el.contains(chip)) return;
+  const idx = +chip.dataset.idx;
+  const cat = chip.dataset.cat;
+  if (!pendingBank[idx]) return;
+  pendingBank[idx].decision = { category: cat };
+  const row = chip.closest(".pi-row");
+  if (row) {
+    const chipsEl = row.querySelector(".cat-chips");
+    if (chipsEl) chipsEl.innerHTML = CATEGORIES.map(c =>
+      '<button class="cat-chip' + (c === cat ? ' active' : '') +
+      '" data-idx="' + idx + '" data-cat="' + escapeHtml(c) + '">' + escapeHtml(c) + '</button>'
+    ).join('');
+  }
+});
+
+// Übernehmen / Alle Rest / Verwerfen
+document.addEventListener("click", e => {
+  if (e.target.id === "bankConfirmBtn") {
+    let added = 0;
+    for (const p of pendingBank) {
+      transactions.push({
+        id: Date.now() + Math.floor(Math.random() * 10000),
+        type: "expense", amount: p.amount, description: p.description,
+        category: (p.decision && p.decision.category) || "Sonstiges",
+        tag: "", conscious: false, date: p.date, bankRef: p.ref
+      });
+      added++;
+    }
+    transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
+    pendingBank = [];
+    save(); render(); refreshBankBadge();
+    document.getElementById("bankResult").innerHTML =
+      '<div class="import-summary">' + added + ' Buchung' + (added === 1 ? '' : 'en') + ' übernommen. Fertig.</div>';
+  }
+  else if (e.target.id === "bankAllRestBtn") {
+    pendingBank.forEach(p => { p.decision = { category: "Rest" }; });
+    renderBankPosteingang();
+  }
+  else if (e.target.id === "bankCancelBtn") {
+    pendingBank = []; refreshBankBadge();
+    document.getElementById("bankResult").innerHTML = '';
+  }
+});
+
+/* ============================================================
+   TRADE REPUBLIC IMPORT (PDF) — folgt direkt unten
+   ============================================================
+   (ehemaliger Dedup-Block entfernt: Duplikate werden jetzt
+    schon beim Import still verbunden, nicht mehr separat
+    angezeigt.)
+   ============================================================ */
+
+/* ============================================================
+   TRADE REPUBLIC IMPORT (PDF)
+   ============================================================
+   Wir laden pdf.js von einem CDN – die Bibliothek, die aus einer
+   PDF-Datei den enthaltenen Text extrahiert. Danach parsen wir mit
+   Regex die einzelnen Positionen raus.
+   ============================================================ */
+let pdfJsPromise = null;
+function loadPdfJs() {
+  if (window.pdfjsLib) return Promise.resolve();
+  if (pdfJsPromise) return pdfJsPromise;
+  pdfJsPromise = new Promise((resolve, reject) => {
+    const s = document.createElement("script");
+    s.src = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
+    s.onload = () => {
+      // pdf.js braucht einen "Worker" – der macht das schwere PDF-Parsen
+      // in einem Hintergrund-Thread, damit die UI nicht einfriert.
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+      resolve();
+    };
+    s.onerror = () => reject(new Error("pdf.js konnte nicht geladen werden. Bist du online?"));
+    document.head.appendChild(s);
+  });
+  return pdfJsPromise;
+}
+
+// Aus einer PDF-Datei den kompletten Text ziehen – Zeilenumbrüche werden
+// aus den Y-Koordinaten der Text-Items rekonstruiert.
+async function extractPDFText(file) {
+  await loadPdfJs();
+  const buf = await file.arrayBuffer();
+  const pdf = await window.pdfjsLib.getDocument({ data: buf }).promise;
+  let out = "";
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const tc = await page.getTextContent();
+    // Items nach Y (Zeile) gruppieren, innerhalb einer Zeile nach X sortieren
+    const rowsByY = {};
+    for (const it of tc.items) {
+      const y = Math.round(it.transform[5]);
+      (rowsByY[y] = rowsByY[y] || []).push({ x: it.transform[4], str: it.str });
+    }
+    const ys = Object.keys(rowsByY).map(Number).sort((a,b) => b - a); // oben zuerst
+    for (const y of ys) {
+      const line = rowsByY[y].sort((a,b) => a.x - b.x).map(o => o.str).join(" ");
+      out += line + "\n";
+    }
+    out += "\n";
+  }
+  return out;
+}
+
+// Parser für den Depotauszug: teilt den Text an "Stk."-Markern in Blöcke
+// auf – jeder Block enthält genau EINE Position. Das ist robuster als der
+// ISIN-Ansatz, weil sonst die Anzahl der nächsten Position ("125,00 Stk.")
+// als Kurswert der aktuellen Position missinterpretiert werden könnte.
+function parseTRDepot(text) {
+  const positions = [];
+  // Zuerst alles nach "ANZAHL POSITIONEN" abschneiden – da steht die Summenzeile
+  // (z. B. "9.045,12 EUR"), die uns beim letzten Block dazwischenfunken würde.
+  const trailerIdx = text.search(/ANZAHL\s+POSITIONEN|ANZAHL\s+DER\s+POSITIONEN|SUMME\s+KURSWERTE/i);
+  if (trailerIdx >= 0) text = text.slice(0, trailerIdx);
+
+  // Alle "Stk."-Marker mit ihrer Position sammeln
+  const stkRE = /([\d.,]+)\s*Stk\./g;
+  const markers = [];
+  let m;
+  while ((m = stkRE.exec(text)) !== null) {
+    markers.push({ index: m.index, qtyStr: m[1], length: m[0].length });
+  }
+
+  // Zwischen zwei Markern liegt eine Position
+  for (let i = 0; i < markers.length; i++) {
+    const start = markers[i].index;
+    const end = i+1 < markers.length ? markers[i+1].index : text.length;
+    const block = text.slice(start, end);
+
+    // ISIN im Block finden – ohne die ist es keine Wertpapier-Position (z. B.
+    // die Kopfzeile "STK. / NOMINALE" die auch "Stk." enthält)
+    const isinMatch = block.match(/ISIN:\s*([A-Z]{2}[A-Z0-9]{10})/);
+    if (!isinMatch) continue;
+    const isin = isinMatch[1];
+
+    // Menge aus dem Marker
+    const qty = parseGermanNumber(markers[i].qtyStr);
+
+    // Name: alles zwischen "Stk." und der ISIN-Zeile
+    const afterStk = block.slice(markers[i].length);
+    const isinIdx = afterStk.indexOf("ISIN:");
+    const name = afterStk.slice(0, isinIdx).replace(/\s+/g, " ").trim().slice(0, 120);
+
+    // Kurswert = letzte Komma-Zahl im Block, nachdem wir Datumsangaben und
+    // Prozentangaben (Gewinn/Verlust-Zeilen) rausgeputzt haben.
+    const clean = block
+      .replace(/\d{2}\.\d{2}\.\d{4}/g, "")
+      .replace(/-?[\d.,]+\s*%/g, "");
+    const numbers = [...clean.matchAll(/(-?[\d.]+,\d+)/g)].map(m => parseGermanNumber(m[1]));
+    if (numbers.length < 1) continue;
+    const value = numbers[numbers.length - 1];
+    if (!isFinite(value) || value <= 0) continue;
+
+    positions.push({ isin, qty, name, value });
+  }
+  return positions;
+}
+
+// Parser für die Crypto-Übersicht: einfacher, weil weniger Positionen.
+// Marker sind Zeilen wie "Bitcoin (Bitcoin)" oder "Ethereum (Ethereum)".
+function parseTRCrypto(text) {
+  const positions = [];
+  // Wir schneiden alles zwischen "NOMINALE" und "ANZAHL DER POSITIONEN" raus
+  // – das ist der Bereich mit den Positionen.
+  const startIdx = text.search(/NOMINALE|PREIS JE ANTEIL/);
+  const endIdx = text.search(/ANZAHL DER POSITIONEN|SUMME KURSWERTE/);
+  const body = (startIdx >= 0 && endIdx > startIdx) ? text.slice(startIdx, endIdx) : text;
+
+  // Muster: Menge (Zeile mit Stk.) + Name + "(Symbol)"
+  // Die Zeilen können unterschiedlich getrennt sein, also robust:
+  const cryptoRE = /([\d.,]+)\s*Stk\.\s*([A-Za-zÄÖÜäöü0-9]+)\s*\(([^)]+)\)([\s\S]*?)(?=[\d.,]+\s*Stk\.|$)/g;
+  let m;
+  while ((m = cryptoRE.exec(body)) !== null) {
+    const qty = parseGermanNumber(m[1]);
+    const name = m[2].trim();
+    const block = m[4]
+      .replace(/\d{2}\.\d{2}\.\d{4}/g, "")
+      .replace(/-?[\d.,]+\s*%/g, "");
+    const numbers = [...block.matchAll(/(-?[\d.]+,\d+)/g)].map(m => parseGermanNumber(m[1]));
+    if (numbers.length < 1) continue;
+    // Letzte Zahl = Kurswert (in EUR)
+    const value = numbers[numbers.length - 1];
+    if (!isFinite(value) || value <= 0) continue;
+    positions.push({ isin: null, qty, name, value, isCrypto: true });
+  }
+  return positions;
+}
+
+// Aktien oder ETF? Anhand des Namens: alles mit "ETF", "ETP", "UCITS" oder
+// "Swap" ist ein ETF/Fonds. Zusätzlich fangen wir bekannte ETF-Anbieter am
+// Namensanfang ab: Xtrackers (Xtr.), iShares (iSh), Vanguard, Amundi, SPDR,
+// Lyxor, Invesco, WisdomTree. Der Rest sind Einzelaktien.
+function classifyTRPosition(p) {
+  if (p.isCrypto) return "Krypto";
+  const n = (p.name || "").toLowerCase();
+  if (/\betf\b|\betp\b|ucits|swap/.test(n)) return "ETF";
+  if (/^(xtr\.|xtrackers|ish[a-z]|vanguard|amundi|spdr|lyxor|invesco|wisdomtree|ais-amundi)/.test(n)) return "ETF";
+  return "Aktien";
+}
+
+/* ---- TR-Import: State + UI ---- */
+let pendingTR = null;    // { type: "depot"|"crypto", positions: [...], total: n }
+
+function handleTRFile(file) {
+  const summary = document.getElementById("trImportSummary");
+  summary.style.display = "block";
+  summary.innerHTML = '<div class="import-summary">Lese PDF und lade Bibliothek… einen Moment.</div>';
+
+  extractPDFText(file).then(text => {
+    // Ist das ein Depotauszug oder eine Crypto-Übersicht?
+    // WICHTIG: Krypto-PDF enthält auch "POSITIONEN" (in "ANZAHL DER POSITIONEN"),
+    // also darf man nicht auf das Wort allein hören. Deshalb: Krypto hat
+    // PRIORITÄT – wenn irgendeines der Krypto-Marker matcht, ist es Krypto.
+    const isCrypto = /CRYPTO-ÜBERSICHT|Kryptowährungen|Cryptos in deinem Depot/i.test(text);
+    const isDepot  = /DEPOTAUSZUG|Wertpapiere in Deinem Depot/i.test(text);
+    let positions = [];
+    let type = null;
+    if (isCrypto) {
+      positions = parseTRCrypto(text);
+      type = "crypto";
+    } else if (isDepot) {
+      positions = parseTRDepot(text);
+      type = "depot";
+    } else {
+      summary.innerHTML = '<div class="import-summary warn">Diese PDF konnte ich nicht als Depotauszug oder Crypto-Übersicht erkennen. Bitte prüfe, ob du die richtige Datei aus Trade Republic hochgeladen hast.</div>';
+      return;
+    }
+
+    if (positions.length === 0) {
+      summary.innerHTML = '<div class="import-summary warn">Keine Positionen im PDF gefunden. Bitte hilf mir kurz: Ist das der aktuelle Depotauszug bzw. die Crypto-Übersicht aus Trade Republic?</div>';
+      return;
+    }
+
+    // Summen je Anlageklasse
+    const byClass = {};
+    for (const p of positions) {
+      const cls = classifyTRPosition(p);
+      byClass[cls] = (byClass[cls] || 0) + p.value;
+    }
+    const total = positions.reduce((s,p) => s + p.value, 0);
+
+    pendingTR = { type, positions, total, byClass };
+
+    // Zusammenfassung
+    const clsLines = Object.keys(byClass).map(c =>
+      '<div style="display:flex;justify-content:space-between;padding:4px 0">' +
+      '<span>TR · ' + c + '</span><strong>' + fmtEuro(byClass[c]) + '</strong></div>'
+    ).join("");
+    summary.innerHTML =
+      '<div class="import-summary">' +
+        '<strong>' + positions.length + '</strong> Positionen erkannt · ' +
+        'Gesamtwert <strong>' + fmtEuro(total) + '</strong>' +
+      '</div>' +
+      '<div style="margin:8px 0 4px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em">' +
+      'Wird als Portfolios aktualisiert:</div>' +
+      clsLines;
+
+    // Positions-Liste zeigen
+    const list = document.getElementById("trPositionList");
+    list.style.display = "block";
+    list.innerHTML =
+      '<details><summary style="font-size:12px">Alle ' + positions.length + ' Positionen anzeigen</summary>' +
+      '<div class="tr-pos-list">' +
+        positions.map(p =>
+          '<div class="tr-pos">' +
+            '<span class="tr-pos-name">' + escapeHtml(p.name) + '</span>' +
+            '<span class="tr-pos-cls">' + classifyTRPosition(p) + '</span>' +
+            '<span class="tr-pos-val">' + fmtEuro(p.value) + '</span>' +
+          '</div>'
+        ).join("") +
+      '</div></details>';
+
+    // Bestätigen-Buttons
+    const actions = document.getElementById("trConfirmActions");
+    actions.style.display = "block";
+    actions.innerHTML =
+      '<button class="btn" id="trConfirmBtn">Portfolios aktualisieren</button>' +
+      '<button class="btn-secondary" id="trCancelBtn">Import verwerfen</button>';
+
+  }).catch(err => {
+    summary.innerHTML = '<div class="import-summary warn">Fehler: ' + escapeHtml(err.message || String(err)) +
+      '<br>Falls dies der erste Import ist: Bist du online? pdf.js wird beim ersten Mal aus dem Netz geladen.</div>';
+  });
+}
+
+// Beim Bestätigen: die alten TR-Portfolios (falls vorhanden) wegwerfen
+// und durch neue mit den frisch importierten Werten ersetzen. So bleibt
+// es idempotent – jeder Import überschreibt sauber.
+function confirmTRImport() {
+  if (!pendingTR) return;
+  const { byClass } = pendingTR;
+  // Alte TR-Portfolios entfernen – nur die, die WIR importiert haben.
+  // Erkennungsmerkmal: Name beginnt mit "TR · ".
+  // Beim Crypto-Import lassen wir Aktien/ETFs unangetastet und umgekehrt,
+  // damit man Depot und Crypto unabhängig aktualisieren kann.
+  const classesInThisImport = Object.keys(byClass);
+  portfolios = portfolios.filter(p => {
+    if (!/^TR · /.test(p.name || "")) return true;
+    // Nur die Klassen entfernen, die JETZT importiert werden
+    const cls = p.name.replace(/^TR · /, "");
+    return !classesInThisImport.includes(cls);
+  });
+  // Neue Portfolios einfügen
+  for (const cls of classesInThisImport) {
+    portfolios.push({
+      id: Date.now() + Math.floor(Math.random()*10000),
+      name: "TR · " + cls,
+      value: Math.round(byClass[cls] * 100) / 100,
+      type: cls === "Krypto" ? "Krypto" : (cls === "ETF" ? "ETF" : "Aktien"),
+      source: "tr-import",
+      updatedAt: new Date().toISOString()
+    });
+  }
+  save();
+  pendingTR = null;
+  render();
+  fillSelectors();   // damit die Portfolio-Liste im "Vermögen aktualisieren"-Bereich frisch ist
+  document.getElementById("trPositionList").style.display = "none";
+  document.getElementById("trConfirmActions").style.display = "none";
+  const sum = document.getElementById("trImportSummary");
+  sum.innerHTML = '<div class="import-summary"><strong>Portfolios aktualisiert.</strong> ' +
+    'Schau in deine Meilensteine und die Vermögenskurve – die reflektieren jetzt die neuen Werte.</div>';
+}
+
+/* ---- Bank-Import: Event-Verdrahtung ---- */
+document.getElementById("bankPickBtn").addEventListener("click", () => {
+  document.getElementById("bankFileInput").click();
+});
+document.getElementById("bankFileInput").addEventListener("change", e => {
+  const file = e.target.files && e.target.files[0];
+  e.target.value = "";
+  if (file) handleBankFile(file);
+});
+document.getElementById("bankHelpToggle").addEventListener("click", e => {
+  e.preventDefault();
+  const h = document.getElementById("bankHelp");
+  h.style.display = h.style.display === "none" ? "block" : "none";
+});
+
+/* ---- TR-Import: Event-Verdrahtung ---- */
+document.getElementById("trPickBtn").addEventListener("click", () => {
+  document.getElementById("trFileInput").click();
+});
+document.getElementById("trFileInput").addEventListener("change", e => {
+  const file = e.target.files && e.target.files[0];
+  e.target.value = "";
+  if (file) handleTRFile(file);
+});
+document.getElementById("trHelpToggle").addEventListener("click", e => {
+  e.preventDefault();
+  const h = document.getElementById("trHelp");
+  h.style.display = h.style.display === "none" ? "block" : "none";
+});
+document.getElementById("trConfirmActions").addEventListener("click", e => {
+  if (e.target.id === "trConfirmBtn") confirmTRImport();
+  else if (e.target.id === "trCancelBtn") {
+    pendingTR = null;
+    document.getElementById("trPositionList").style.display = "none";
+    document.getElementById("trConfirmActions").style.display = "none";
+    document.getElementById("trImportSummary").style.display = "none";
+  }
+});
+
+// Kleine HTML-Escape-Funktion, damit User-Text (aus CSV/PDF) nicht als
+// HTML interpretiert wird – Schutz vor kaputten Anzeigen (kein XSS-Risiko,
+// weil alles lokal, aber Anführungszeichen etc. würden das Layout brechen).
+function escapeHtml(s) {
+  return String(s || "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+// Euro-Formatierung nutzt die bereits vorhandene Funktion aus der App
+// (heißt dort "euro"). Fallback für den Fall, dass sie mal umbenannt wird.
+function fmtEuro(n) {
+  return (typeof euro === "function") ? euro(n)
+    : n.toLocaleString("de-DE", { style:"currency", currency:"EUR" });
 }
 
 /* ---------- START ---------- */
