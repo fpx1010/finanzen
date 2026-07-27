@@ -370,6 +370,24 @@
   .tr-pos-cls { font-size: 10px; color: var(--muted); text-transform: uppercase;
                 letter-spacing: .04em; padding: 2px 6px; border: 1px solid var(--line);
                 border-radius: 6px; flex-shrink: 0; align-self: center; }
+  /* ── Splash ── */
+  #splash { position: fixed; inset: 0; z-index: 9999;
+            background: var(--bg);
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.5s ease; }
+  #splash-arrow {
+    width: 120px; height: auto;
+    display: block;
+    -webkit-mask: linear-gradient(black, black) bottom / 100% 0% no-repeat;
+            mask: linear-gradient(black, black) bottom / 100% 0% no-repeat;
+    transition: -webkit-mask-size 0.85s cubic-bezier(0.4, 0, 0.2, 1),
+                        mask-size 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #splash.grow #splash-arrow {
+    -webkit-mask-size: 100% 100%;
+            mask-size: 100% 100%;
+  }
+
 </style>
 <script>
   /* Läuft VOR dem Rendern des Body: setzt Dark Mode sofort, damit es
@@ -3026,6 +3044,29 @@ document.getElementById("txDate").value    = todayISO();
 document.getElementById("refPriceInput").value = refFor(ocCat) ?? "";
 
 render();
+
+// ── Splash-Animation ──────────────────────────────────────────────────────
+// Der Pfeil aus dem App-Icon als SVG-Vektor nachgebaut (Skelett-Punkte
+// aus dem Original-PNG extrahiert). Skaliert auf jeder Auflösung scharf.
+// Animation: mask-size wächst von 0% auf 100% Höhe, revealt den Pfeil
+// von unten nach oben.
+(function() {
+  const splash = document.createElement("div");
+  splash.id = "splash";
+  splash.innerHTML = `<img id="splash-arrow" alt=""
+    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiIHNoYXBlLXJlbmRlcmluZz0iZ2VvbWV0cmljUHJlY2lzaW9uIj48cG9seWxpbmUgcG9pbnRzPSI1LDU1IDQzLDMwIDYwLDQyIDkxLDEwIiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjEwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cG9seWxpbmUgcG9pbnRzPSI2MywxMCA5MSwxMCA5MSwzMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIxMCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9zdmc+">`;
+  document.body.appendChild(splash);
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      splash.classList.add("grow");
+      setTimeout(() => {
+        splash.style.opacity = "0";
+        setTimeout(() => splash.remove(), 500);
+      }, 900);
+    });
+  });
+})();
 </script>
 </body>
 </html>
